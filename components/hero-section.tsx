@@ -1,33 +1,35 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Github, Linkedin, Twitter, Download, ArrowRight, Sparkles } from "lucide-react"
-import Link from "next/link"
+import { Button } from "@/components/ui/button";
+import ProfilePhoto from "@/public/images/mahedihassanshraif.jpg";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight, Eye, Sparkles } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const roles = [
   "Frontend Developer",
-  "Full Stack Developer", 
+  "Full Stack Developer",
   "MERN Stack Developer",
-]
+];
 
-const FloatingBubble = ({ 
-  size, 
-  initialX, 
-  initialY, 
+const FloatingBubble = ({
+  size,
+  initialX,
+  initialY,
   duration,
-  delay 
-}: { 
-  size: number
-  initialX: number
-  initialY: number
-  duration: number
-  delay: number
+  delay,
+}: {
+  size: number;
+  initialX: number;
+  initialY: number;
+  duration: number;
+  delay: number;
 }) => {
   return (
     <motion.div
-      className="absolute rounded-full bg-gradient-to-br from-violet-500/20 to-purple-600/20 blur-xl"
+      className="absolute rounded-full bg-linear-to-br from-violet-500/20 to-purple-600/20 blur-xl"
       style={{
         width: size,
         height: size,
@@ -47,8 +49,8 @@ const FloatingBubble = ({
         ease: "easeInOut",
       }}
     />
-  )
-}
+  );
+};
 
 const bubbles = [
   { size: 300, initialX: 10, initialY: 20, duration: 20, delay: 0 },
@@ -57,17 +59,69 @@ const bubbles = [
   { size: 250, initialX: 20, initialY: 70, duration: 22, delay: 3 },
   { size: 180, initialX: 50, initialY: 40, duration: 24, delay: 1.5 },
   { size: 120, initialX: 90, initialY: 80, duration: 19, delay: 2.5 },
-]
+];
+
+// Custom Social Icons (SVG) — lucide-react deprecated icons replace
+const GitHubIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+  </svg>
+);
+
+const LinkedInIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+  </svg>
+);
+
+const XIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={className}
+    aria-hidden="true"
+  >
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.91-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
+
+const socialLinks = [
+  {
+    icon: GitHubIcon,
+    href: "https://github.com/mahedihsharif",
+    label: "GitHub",
+  },
+  {
+    icon: LinkedInIcon,
+    href: "https://linkedin.com/in/mahedihsharif",
+    label: "LinkedIn",
+  },
+  {
+    icon: XIcon,
+    href: "https://twitter.com/mahedihsharif",
+    label: "X (Twitter)",
+  },
+];
 
 export function HeroSection() {
-  const [currentRoleIndex, setCurrentRoleIndex] = useState(0)
+  const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentRoleIndex((prev) => (prev + 1) % roles.length)
-    }, 3000)
-    return () => clearInterval(interval)
-  }, [])
+      setCurrentRoleIndex((prev) => (prev + 1) % roles.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <section
@@ -125,7 +179,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
           >
-            <span className="bg-gradient-to-r from-violet-400 via-purple-500 to-violet-600 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-violet-400 via-purple-500 to-violet-600 bg-clip-text text-transparent">
               Mahedi H Sharif
             </span>
           </motion.h1>
@@ -158,9 +212,11 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
           >
-            I craft exceptional digital experiences with modern technologies.
-            Passionate about building scalable, user-centric applications that 
-            make a real impact. Let&apos;s turn your ideas into reality.
+            With 1.5+ years of experience in full-stack development, I build
+            digital products that are fast, scalable, and genuinely enjoyable to
+            use — from intuitive, pixel-perfect interfaces to reliable,
+            well-architected backends. I care about every layer of the stack,
+            and every step of the user&apos;s journey.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -173,14 +229,14 @@ export function HeroSection() {
             <Button
               asChild
               size="lg"
-              className="group relative overflow-hidden bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-violet-500/40"
+              className="group relative overflow-hidden bg-linear-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-violet-500/40"
             >
               <Link href="#projects">
                 <span className="relative z-10 flex items-center gap-2">
                   View Projects
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </span>
-                <span className="absolute inset-0 -z-10 bg-gradient-to-r from-purple-600 to-violet-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <span className="absolute inset-0 -z-10 bg-linear-to-r from-purple-600 to-violet-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               </Link>
             </Button>
 
@@ -191,7 +247,7 @@ export function HeroSection() {
               className="group border-violet-500/50 bg-violet-500/10 backdrop-blur-sm transition-all duration-300 hover:border-violet-400 hover:bg-violet-500/20"
             >
               <Link href="#contact">
-                <span className="flex items-center gap-2 bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
+                <span className="flex items-center gap-2 bg-linear-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
                   Contact Me
                 </span>
               </Link>
@@ -203,9 +259,13 @@ export function HeroSection() {
               variant="ghost"
               className="group transition-all duration-300 hover:bg-violet-500/10"
             >
-              <a href="/cv.pdf" download>
-                <Download className="mr-2 h-4 w-4 text-violet-400 transition-transform duration-300 group-hover:-translate-y-1" />
-                <span>Download CV</span>
+              <a
+                href="https://drive.google.com/file/d/1TN5o2kUOAq_1qmTmsmATxQ_WsymD6S0b/view?usp=drive_link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Eye className="h-4 w-4 text-violet-400 transition-transform duration-300 group-hover:-translate-y-1" />
+                <span>View CV</span>
               </a>
             </Button>
           </motion.div>
@@ -219,11 +279,7 @@ export function HeroSection() {
           >
             <span className="text-sm text-muted-foreground">Find me on</span>
             <div className="flex items-center gap-3">
-              {[
-                { icon: Github, href: "https://github.com", label: "GitHub" },
-                { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-                { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
-              ].map(({ icon: Icon, href, label }) => (
+              {socialLinks.map(({ icon: Icon, href, label }) => (
                 <motion.a
                   key={label}
                   href={href}
@@ -244,6 +300,7 @@ export function HeroSection() {
         {/* Right Content - Profile Image */}
         <motion.div
           className="relative flex flex-1 items-center justify-center"
+          style={{ minHeight: "420px" }}
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
@@ -255,11 +312,11 @@ export function HeroSection() {
             transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
           />
           <motion.div
-            className="absolute h-80 w-80 rounded-full border border-purple-500/15 sm:h-88 sm:w-88 md:h-[26rem] md:w-[26rem]"
+            className="absolute h-80 w-80 rounded-full border border-purple-500/15 sm:h-88 sm:w-88 md:h-104 md:w-104"
             animate={{ rotate: -360 }}
             transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
           />
-          
+
           {/* Glowing Orbs on Ring */}
           <motion.div
             className="absolute h-72 w-72 sm:h-80 sm:w-80 md:h-96 md:w-96"
@@ -272,50 +329,96 @@ export function HeroSection() {
 
           {/* Profile Image Container */}
           <motion.div
-            className="relative z-10 h-64 w-64 overflow-hidden rounded-full border-4 border-violet-500/30 bg-gradient-to-br from-violet-600/20 to-purple-600/20 p-1 shadow-2xl shadow-violet-500/20 sm:h-72 sm:w-72 md:h-80 md:w-80"
+            className="z-10 h-48 w-48 overflow-hidden rounded-full border-4 border-violet-500/30 shadow-2xl shadow-violet-500/20 sm:h-72 sm:w-72 md:h-80 md:w-80"
             animate={{ y: [0, -10, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
-            <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-violet-900/50 to-purple-900/50 backdrop-blur-sm">
-              {/* Placeholder for profile image */}
-              <div className="flex flex-col items-center justify-center">
-                <span className="bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-6xl font-bold text-transparent sm:text-7xl md:text-8xl">
-                  M
-                </span>
-                <span className="mt-2 text-sm text-violet-300/80">Profile Photo</span>
-              </div>
-            </div>
+            <Image
+              src={ProfilePhoto}
+              alt="Profile Image"
+              fill
+              className="object-cover"
+            />
           </motion.div>
 
           {/* Floating Tech Badges */}
+          {/* Left side */}
           <motion.div
-            className="absolute -left-4 top-1/4 rounded-lg border border-violet-500/30 bg-background/80 px-3 py-1.5 backdrop-blur-sm sm:left-0"
+            className="absolute left-0 top-[8%] rounded-lg border border-violet-500/30 bg-background/80 px-3 py-1.5 backdrop-blur-sm"
             animate={{ y: [0, -8, 0], x: [0, 5, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           >
-            <span className="text-sm font-medium text-violet-400">React.js</span>
+            <span className="text-sm font-medium text-violet-400">
+              React.js
+            </span>
           </motion.div>
-          
+
           <motion.div
-            className="absolute -right-4 top-1/3 rounded-lg border border-purple-500/30 bg-background/80 px-3 py-1.5 backdrop-blur-sm sm:right-0"
-            animate={{ y: [0, 10, 0], x: [0, -5, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          >
-            <span className="text-sm font-medium text-purple-400">Next.js</span>
-          </motion.div>
-          
-          <motion.div
-            className="absolute bottom-1/4 -left-2 rounded-lg border border-violet-500/30 bg-background/80 px-3 py-1.5 backdrop-blur-sm sm:left-4"
+            className="absolute left-0 top-[36%] rounded-lg border border-violet-500/30 bg-background/80 px-3 py-1.5 backdrop-blur-sm"
             animate={{ y: [0, 8, 0], x: [0, -3, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 2,
+            }}
+          >
+            <span className="text-sm font-medium text-violet-400">
+              TypeScript
+            </span>
+          </motion.div>
+
+          <motion.div
+            className="absolute left-0 top-[64%] rounded-lg border border-violet-500/30 bg-background/80 px-3 py-1.5 backdrop-blur-sm"
+            animate={{ y: [0, 8, 0], x: [0, -3, 0] }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1,
+            }}
           >
             <span className="text-sm font-medium text-violet-400">Node.js</span>
           </motion.div>
-          
+
+          {/* Right side */}
           <motion.div
-            className="absolute bottom-1/4 -right-2 rounded-lg border border-purple-500/30 bg-background/80 px-3 py-1.5 backdrop-blur-sm sm:right-4"
+            className="absolute right-0 top-[8%] rounded-lg border border-violet-500/30 bg-background/80 px-3 py-1.5 backdrop-blur-sm"
+            animate={{ y: [0, 8, 0], x: [0, -3, 0] }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 3,
+            }}
+          >
+            <span className="text-sm font-medium text-violet-400">
+              PostgreSQL
+            </span>
+          </motion.div>
+
+          <motion.div
+            className="absolute right-0 top-[36%] rounded-lg border border-purple-500/30 bg-background/80 px-3 py-1.5 backdrop-blur-sm"
+            animate={{ y: [0, 10, 0], x: [0, -5, 0] }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1,
+            }}
+          >
+            <span className="text-sm font-medium text-purple-400">Next.js</span>
+          </motion.div>
+
+          <motion.div
+            className="absolute right-0 top-[64%] rounded-lg border border-purple-500/30 bg-background/80 px-3 py-1.5 backdrop-blur-sm"
             animate={{ y: [0, -6, 0], x: [0, 4, 0] }}
-            transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+            transition={{
+              duration: 5.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.5,
+            }}
           >
             <span className="text-sm font-medium text-purple-400">MongoDB</span>
           </motion.div>
@@ -339,11 +442,15 @@ export function HeroSection() {
             <motion.div
               className="h-1.5 w-1 rounded-full bg-violet-400"
               animate={{ y: [0, 8, 0], opacity: [1, 0.5, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
             />
           </div>
         </motion.div>
       </motion.div>
     </section>
-  )
+  );
 }
