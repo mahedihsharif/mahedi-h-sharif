@@ -1,157 +1,181 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { 
-  Send, 
-  Mail, 
-  User, 
-  MessageSquare,
-  Github,
-  Linkedin,
-  Twitter,
-  MapPin,
-  Phone,
-  Clock,
-  CheckCircle2,
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import emailjs from "@emailjs/browser";
+import { motion } from "framer-motion";
+import {
   AlertCircle,
-  Loader2
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
+  CheckCircle2,
+  Clock,
+  Loader2,
+  Mail,
+  MapPin,
+  MessageSquare,
+  Phone,
+  Send,
+  User,
+} from "lucide-react";
+import { useState } from "react";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 interface FormData {
-  name: string
-  email: string
-  message: string
+  name: string;
+  email: string;
+  message: string;
 }
 
 interface FormErrors {
-  name?: string
-  email?: string
-  message?: string
+  name?: string;
+  email?: string;
+  message?: string;
 }
 
-type FormStatus = "idle" | "loading" | "success" | "error"
+type FormStatus = "idle" | "loading" | "success" | "error";
 
 export function ContactSection() {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
-    message: ""
-  })
-  const [errors, setErrors] = useState<FormErrors>({})
-  const [status, setStatus] = useState<FormStatus>("idle")
-  const [touched, setTouched] = useState<Record<string, boolean>>({})
+    message: "",
+  });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [status, setStatus] = useState<FormStatus>("idle");
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
-  const validateField = (name: keyof FormData, value: string): string | undefined => {
+  const validateField = (
+    name: keyof FormData,
+    value: string,
+  ): string | undefined => {
     switch (name) {
       case "name":
-        if (!value.trim()) return "Name is required"
-        if (value.trim().length < 2) return "Name must be at least 2 characters"
-        return undefined
+        if (!value.trim()) return "Name is required";
+        if (value.trim().length < 2)
+          return "Name must be at least 2 characters";
+        return undefined;
       case "email":
-        if (!value.trim()) return "Email is required"
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Please enter a valid email"
-        return undefined
+        if (!value.trim()) return "Email is required";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+          return "Please enter a valid email";
+        return undefined;
       case "message":
-        if (!value.trim()) return "Message is required"
-        if (value.trim().length < 10) return "Message must be at least 10 characters"
-        return undefined
+        if (!value.trim()) return "Message is required";
+        if (value.trim().length < 10)
+          return "Message must be at least 10 characters";
+        return undefined;
       default:
-        return undefined
+        return undefined;
     }
-  }
+  };
 
   const validateForm = (): boolean => {
-    const newErrors: FormErrors = {}
-    let isValid = true
+    const newErrors: FormErrors = {};
+    let isValid = true;
 
-    ;(Object.keys(formData) as Array<keyof FormData>).forEach((key) => {
-      const error = validateField(key, formData[key])
+    (Object.keys(formData) as Array<keyof FormData>).forEach((key) => {
+      const error = validateField(key, formData[key]);
       if (error) {
-        newErrors[key] = error
-        isValid = false
+        newErrors[key] = error;
+        isValid = false;
       }
-    })
+    });
 
-    setErrors(newErrors)
-    return isValid
-  }
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleChange = (name: keyof FormData, value: string) => {
-    setFormData(prev => ({ ...prev, [name]: value }))
-    
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
     if (touched[name]) {
-      const error = validateField(name, value)
-      setErrors(prev => ({ ...prev, [name]: error }))
+      const error = validateField(name, value);
+      setErrors((prev) => ({ ...prev, [name]: error }));
     }
-  }
+  };
 
   const handleBlur = (name: keyof FormData) => {
-    setTouched(prev => ({ ...prev, [name]: true }))
-    const error = validateField(name, formData[name])
-    setErrors(prev => ({ ...prev, [name]: error }))
-  }
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    const error = validateField(name, formData[name]);
+    setErrors((prev) => ({ ...prev, [name]: error }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    setTouched({ name: true, email: true, message: true })
-    
-    if (!validateForm()) return
+    e.preventDefault();
 
-    setStatus("loading")
+    setTouched({ name: true, email: true, message: true });
+    if (!validateForm()) return;
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    setStatus("loading");
 
-    // Simulate success (90% success rate for demo)
-    if (Math.random() > 0.1) {
-      setStatus("success")
-      setFormData({ name: "", email: "", message: "" })
-      setTouched({})
-      setTimeout(() => setStatus("idle"), 5000)
-    } else {
-      setStatus("error")
-      setTimeout(() => setStatus("idle"), 5000)
+    try {
+      await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+        },
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!,
+      );
+
+      setStatus("success");
+      setFormData({ name: "", email: "", message: "" });
+      setTouched({});
+      setTimeout(() => setStatus("idle"), 5000);
+    } catch (error) {
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 5000);
     }
-  }
+  };
 
   const contactInfo = [
     {
       icon: Mail,
       label: "Email",
-      value: "mahedi@example.com",
-      href: "mailto:mahedi@example.com"
+      value: "mahedi5061@gmail.com",
+      href: "#",
     },
     {
       icon: Phone,
       label: "Phone",
-      value: "+880 1234 567890",
-      href: "tel:+8801234567890"
+      value: "+880 1700772420",
+      href: "#",
     },
     {
       icon: MapPin,
       label: "Location",
       value: "Dhaka, Bangladesh",
-      href: "#"
+      href: "#",
     },
     {
       icon: Clock,
       label: "Availability",
-      value: "Mon - Fri, 9AM - 6PM",
-      href: "#"
-    }
-  ]
+      value: "Sun - Sat, 9AM - 6PM",
+      href: "#",
+    },
+  ];
 
   const socialLinks = [
-    { icon: Github, href: "https://github.com", label: "GitHub" },
-    { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-    { icon: Twitter, href: "https://twitter.com", label: "Twitter" }
-  ]
+    {
+      icon: FaGithub,
+      href: "https://github.com/mahedihsharif",
+      label: "GitHub",
+    },
+    {
+      icon: FaLinkedin,
+      href: "https://linkedin.com/in/mahedihsharif",
+      label: "LinkedIn",
+    },
+    {
+      icon: FaXTwitter,
+      href: "https://twitter.com/mahedihsharif",
+      label: "Twitter",
+    },
+  ];
 
   return (
     <section id="contact" className="relative overflow-hidden py-24 sm:py-32">
@@ -176,13 +200,13 @@ export function ContactSection() {
           </span>
           <h2 className="mt-6 text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
             Let&apos;s Work{" "}
-            <span className="bg-gradient-to-r from-violet-500 to-purple-500 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-violet-500 to-purple-500 bg-clip-text text-transparent">
               Together
             </span>
           </h2>
           <p className="mt-4 text-pretty text-lg text-muted-foreground">
-            Have a project in mind? I&apos;d love to hear about it. Send me a message
-            and let&apos;s create something amazing together.
+            Have a project in mind? I&apos;d love to hear about it. Send me a
+            message and let&apos;s create something amazing together.
           </p>
         </motion.div>
 
@@ -196,12 +220,15 @@ export function ContactSection() {
           >
             <div className="relative rounded-2xl border border-border/50 bg-card/50 p-6 backdrop-blur-sm sm:p-8">
               {/* Gradient border effect */}
-              <div className="absolute inset-0 -z-10 rounded-2xl bg-gradient-to-br from-violet-500/20 via-transparent to-purple-500/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-              
+              <div className="absolute inset-0 -z-10 rounded-2xl bg-linear-to-br from-violet-500/20 via-transparent to-purple-500/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Name Field */}
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-sm font-medium text-foreground">
+                  <Label
+                    htmlFor="name"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Your Name
                   </Label>
                   <div className="relative">
@@ -235,7 +262,10 @@ export function ContactSection() {
 
                 {/* Email Field */}
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium text-foreground">
+                  <Label
+                    htmlFor="email"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Email Address
                   </Label>
                   <div className="relative">
@@ -269,7 +299,10 @@ export function ContactSection() {
 
                 {/* Message Field */}
                 <div className="space-y-2">
-                  <Label htmlFor="message" className="text-sm font-medium text-foreground">
+                  <Label
+                    htmlFor="message"
+                    className="text-sm font-medium text-foreground"
+                  >
                     Your Message
                   </Label>
                   <div className="relative">
@@ -281,7 +314,7 @@ export function ContactSection() {
                       onChange={(e) => handleChange("message", e.target.value)}
                       onBlur={() => handleBlur("message")}
                       rows={5}
-                      className={`min-h-[140px] resize-none pl-11 pt-3 transition-all ${
+                      className={`min-h-35 resize-none pl-11 pt-3 transition-all ${
                         errors.message && touched.message
                           ? "border-red-500 focus-visible:ring-red-500"
                           : "focus-visible:ring-violet-500"
@@ -305,7 +338,7 @@ export function ContactSection() {
                 <Button
                   type="submit"
                   disabled={status === "loading"}
-                  className="group h-12 w-full gap-2 bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/25 transition-all hover:shadow-xl hover:shadow-violet-500/30"
+                  className="group h-12 w-full gap-2 bg-linear-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/25 transition-all hover:shadow-xl hover:shadow-violet-500/30"
                 >
                   {status === "loading" ? (
                     <>
@@ -327,9 +360,10 @@ export function ContactSection() {
                     animate={{ opacity: 1, y: 0 }}
                     className="flex items-center gap-2 rounded-lg bg-green-500/10 p-4 text-green-500"
                   >
-                    <CheckCircle2 className="h-5 w-5 flex-shrink-0" />
+                    <CheckCircle2 className="h-5 w-5 shrink-0" />
                     <p className="text-sm">
-                      Thank you! Your message has been sent successfully. I&apos;ll get back to you soon.
+                      Thank you! Your message has been sent successfully.
+                      I&apos;ll get back to you soon.
                     </p>
                   </motion.div>
                 )}
@@ -340,7 +374,7 @@ export function ContactSection() {
                     animate={{ opacity: 1, y: 0 }}
                     className="flex items-center gap-2 rounded-lg bg-red-500/10 p-4 text-red-500"
                   >
-                    <AlertCircle className="h-5 w-5 flex-shrink-0" />
+                    <AlertCircle className="h-5 w-5 shrink-0" />
                     <p className="text-sm">
                       Oops! Something went wrong. Please try again later.
                     </p>
@@ -371,12 +405,14 @@ export function ContactSection() {
                   whileHover={{ scale: 1.02, y: -2 }}
                   className="group relative overflow-hidden rounded-xl border border-border/50 bg-card/50 p-5 backdrop-blur-sm transition-all hover:border-violet-500/30 hover:shadow-lg hover:shadow-violet-500/5"
                 >
-                  <div className="absolute inset-0 -z-10 bg-gradient-to-br from-violet-500/5 to-purple-500/5 opacity-0 transition-opacity group-hover:opacity-100" />
+                  <div className="absolute inset-0 -z-10 bg-linear-to-br from-violet-500/5 to-purple-500/5 opacity-0 transition-opacity group-hover:opacity-100" />
                   <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-violet-500/10 text-violet-500 transition-colors group-hover:bg-violet-500/20">
                     <item.icon className="h-5 w-5" />
                   </div>
                   <p className="text-sm text-muted-foreground">{item.label}</p>
-                  <p className="mt-1 font-medium text-foreground">{item.value}</p>
+                  <p className="mt-1 font-medium text-foreground">
+                    {item.value}
+                  </p>
                 </motion.a>
               ))}
             </div>
@@ -387,7 +423,8 @@ export function ContactSection() {
                 Connect With Me
               </h3>
               <p className="mb-6 text-sm text-muted-foreground">
-                Follow me on social media to stay updated with my latest projects and articles.
+                Follow me on social media to stay updated with my latest
+                projects and articles.
               </p>
               <div className="flex gap-4">
                 {socialLinks.map((social) => (
@@ -408,7 +445,7 @@ export function ContactSection() {
             </div>
 
             {/* Availability Card */}
-            <div className="relative overflow-hidden rounded-xl border border-violet-500/20 bg-gradient-to-br from-violet-500/10 to-purple-500/10 p-6 backdrop-blur-sm">
+            <div className="relative overflow-hidden rounded-xl border border-violet-500/20 bg-linear-to-br from-violet-500/10 to-purple-500/10 p-6 backdrop-blur-sm">
               <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-violet-500/20 blur-2xl" />
               <div className="relative">
                 <div className="mb-3 flex items-center gap-2">
@@ -424,8 +461,9 @@ export function ContactSection() {
                   Ready for New Opportunities
                 </h3>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  I&apos;m currently open to freelance projects and full-time positions.
-                  Let&apos;s discuss how I can help bring your ideas to life.
+                  I&apos;m currently open to freelance projects and full-time
+                  positions. Let&apos;s discuss how I can help bring your ideas
+                  to life.
                 </p>
               </div>
             </div>
@@ -433,5 +471,5 @@ export function ContactSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

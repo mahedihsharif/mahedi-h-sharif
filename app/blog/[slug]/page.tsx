@@ -1,53 +1,58 @@
-"use client"
+"use client";
 
-import { useParams } from "next/navigation"
-import { motion } from "framer-motion"
-import { 
-  Calendar, 
-  Clock, 
-  User, 
-  ArrowLeft, 
-  Share2, 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import {
+  ArrowLeft,
   Bookmark,
+  Calendar,
+  Check,
+  ChevronRight,
+  Clock,
+  Copy,
   Heart,
   MessageCircle,
-  Copy,
-  Check,
-  ChevronRight
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import Link from "next/link"
-import { useState } from "react"
+  Share2,
+} from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { JSX, useState } from "react";
 
 // Sample blog post data
-const blogPostsData: Record<string, {
-  title: string
-  description: string
-  content: string
-  image: string
-  category: string
-  date: string
-  readTime: string
-  author: {
-    name: string
-    avatar: string
-    role: string
+const blogPostsData: Record<
+  string,
+  {
+    title: string;
+    description: string;
+    content: string;
+    image: string;
+    category: string;
+    date: string;
+    readTime: string;
+    author: {
+      name: string;
+      avatar: string;
+      role: string;
+    };
+    tags: string[];
   }
-  tags: string[]
-}> = {
+> = {
   "building-scalable-apis-nodejs": {
     title: "Building Scalable APIs with Node.js and Express",
-    description: "Learn how to design and implement production-ready RESTful APIs with proper error handling, authentication, and best practices.",
-    image: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=1200&h=600&fit=crop",
+    description:
+      "Learn how to design and implement production-ready RESTful APIs with proper error handling, authentication, and best practices.",
+    image:
+      "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=1200&h=600&fit=crop",
     category: "Backend",
     date: "December 15, 2024",
     readTime: "8 min read",
     author: {
       name: "Mahedi H Sharif",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop",
-      role: "Full Stack Developer"
+      avatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop",
+      role: "Full Stack Developer",
     },
     tags: ["Node.js", "Express", "API", "Backend", "REST"],
     content: `
@@ -213,19 +218,22 @@ Remember to always:
 - Write tests
 
 Happy coding!
-    `
+    `,
   },
   "modern-state-management-react": {
     title: "Modern State Management in React Applications",
-    description: "Explore different state management solutions including Redux Toolkit, Zustand, and React Query for optimal performance.",
-    image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&h=600&fit=crop",
+    description:
+      "Explore different state management solutions including Redux Toolkit, Zustand, and React Query for optimal performance.",
+    image:
+      "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&h=600&fit=crop",
     category: "Frontend",
     date: "December 10, 2024",
     readTime: "6 min read",
     author: {
       name: "Mahedi H Sharif",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop",
-      role: "Full Stack Developer"
+      avatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop",
+      role: "Full Stack Developer",
     },
     tags: ["React", "Redux", "Zustand", "State Management", "Frontend"],
     content: `
@@ -291,47 +299,50 @@ function Posts() {
 ## Conclusion
 
 Choose the right tool for the job: useState for local state, Zustand or Redux for global state, and React Query for server state.
-    `
-  }
-}
+    `,
+  },
+};
 
 // Related posts
 const relatedPosts = [
   {
     id: 4,
     title: "TypeScript Best Practices for Large Scale Applications",
-    image: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=400&h=250&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=400&h=250&fit=crop",
     category: "TypeScript",
     readTime: "12 min read",
-    slug: "typescript-best-practices"
+    slug: "typescript-best-practices",
   },
   {
     id: 5,
     title: "Authentication Strategies: JWT vs Session-Based",
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=250&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=250&fit=crop",
     category: "Security",
     readTime: "9 min read",
-    slug: "authentication-jwt-vs-session"
+    slug: "authentication-jwt-vs-session",
   },
   {
     id: 6,
     title: "Building Real-Time Features with WebSockets",
-    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&h=250&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&h=250&fit=crop",
     category: "Backend",
     readTime: "7 min read",
-    slug: "realtime-websockets"
-  }
-]
+    slug: "realtime-websockets",
+  },
+];
 
 // Code block component with copy functionality
 function CodeBlock({ code, language }: { code: string; language: string }) {
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(code)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
+    navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div className="group relative my-6 overflow-hidden rounded-xl border border-border/50 bg-zinc-950">
@@ -358,89 +369,102 @@ function CodeBlock({ code, language }: { code: string; language: string }) {
         <code className="text-sm text-zinc-300">{code}</code>
       </pre>
     </div>
-  )
+  );
 }
 
 // Parse content and render with proper formatting
 function BlogContent({ content }: { content: string }) {
-  const lines = content.trim().split('\n')
-  const elements: JSX.Element[] = []
-  let currentCodeBlock: string[] = []
-  let currentLanguage = ''
-  let inCodeBlock = false
-  let key = 0
+  const lines = content.trim().split("\n");
+  const elements: JSX.Element[] = [];
+  let currentCodeBlock: string[] = [];
+  let currentLanguage = "";
+  let inCodeBlock = false;
+  let key = 0;
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]
+    const line = lines[i];
 
     // Code block handling
-    if (line.startsWith('```')) {
+    if (line.startsWith("```")) {
       if (inCodeBlock) {
         elements.push(
-          <CodeBlock key={key++} code={currentCodeBlock.join('\n')} language={currentLanguage} />
-        )
-        currentCodeBlock = []
-        currentLanguage = ''
-        inCodeBlock = false
+          <CodeBlock
+            key={key++}
+            code={currentCodeBlock.join("\n")}
+            language={currentLanguage}
+          />,
+        );
+        currentCodeBlock = [];
+        currentLanguage = "";
+        inCodeBlock = false;
       } else {
-        inCodeBlock = true
-        currentLanguage = line.slice(3) || 'code'
+        inCodeBlock = true;
+        currentLanguage = line.slice(3) || "code";
       }
-      continue
+      continue;
     }
 
     if (inCodeBlock) {
-      currentCodeBlock.push(line)
-      continue
+      currentCodeBlock.push(line);
+      continue;
     }
 
     // Headings
-    if (line.startsWith('## ')) {
+    if (line.startsWith("## ")) {
       elements.push(
-        <h2 key={key++} className="mb-4 mt-12 text-2xl font-bold text-foreground first:mt-0">
+        <h2
+          key={key++}
+          className="mb-4 mt-12 text-2xl font-bold text-foreground first:mt-0"
+        >
           {line.slice(3)}
-        </h2>
-      )
-      continue
+        </h2>,
+      );
+      continue;
     }
 
-    if (line.startsWith('### ')) {
+    if (line.startsWith("### ")) {
       elements.push(
-        <h3 key={key++} className="mb-3 mt-8 text-xl font-semibold text-foreground">
+        <h3
+          key={key++}
+          className="mb-3 mt-8 text-xl font-semibold text-foreground"
+        >
           {line.slice(4)}
-        </h3>
-      )
-      continue
+        </h3>,
+      );
+      continue;
     }
 
     // Lists
-    if (line.startsWith('- ')) {
+    if (line.startsWith("- ")) {
       elements.push(
         <li key={key++} className="ml-6 list-disc text-muted-foreground">
           {line.slice(2)}
-        </li>
-      )
-      continue
+        </li>,
+      );
+      continue;
     }
 
     // Inline code
-    if (line.includes('`') && !line.startsWith('```')) {
-      const parts = line.split(/(`[^`]+`)/)
+    if (line.includes("`") && !line.startsWith("```")) {
+      const parts = line.split(/(`[^`]+`)/);
       elements.push(
         <p key={key++} className="mb-4 leading-relaxed text-muted-foreground">
           {parts.map((part, idx) => {
-            if (part.startsWith('`') && part.endsWith('`')) {
+            if (part.startsWith("`") && part.endsWith("`")) {
               return (
-                <code key={idx} className="rounded bg-violet-500/10 px-1.5 py-0.5 text-sm text-violet-500">
+                <code
+                  key={idx}
+                  className="rounded bg-violet-500/10 px-1.5 py-0.5 text-sm text-violet-500"
+                >
                   {part.slice(1, -1)}
                 </code>
-              )
+              );
             }
-            return part
+            return part;
           })}
-        </p>
-      )
-      continue
+        </p>,
+      );
+      continue;
     }
 
     // Regular paragraphs
@@ -448,34 +472,35 @@ function BlogContent({ content }: { content: string }) {
       elements.push(
         <p key={key++} className="mb-4 leading-relaxed text-muted-foreground">
           {line}
-        </p>
-      )
+        </p>,
+      );
     }
   }
 
-  return <>{elements}</>
+  return <>{elements}</>;
 }
 
 export default function BlogPostPage() {
-  const params = useParams()
-  const slug = params.slug as string
-  const [liked, setLiked] = useState(false)
-  const [bookmarked, setBookmarked] = useState(false)
+  const params = useParams();
+  const slug = params.slug as string;
+  const [liked, setLiked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
 
-  const post = blogPostsData[slug] || blogPostsData["building-scalable-apis-nodejs"]
+  const post =
+    blogPostsData[slug] || blogPostsData["building-scalable-apis-nodejs"];
 
   return (
     <main className="min-h-screen bg-background pt-24">
       {/* Hero Section */}
       <section className="relative">
         {/* Background Image */}
-        <div className="relative h-[50vh] min-h-[400px] w-full overflow-hidden">
+        <div className="relative h-[50vh] min-h-100 w-full overflow-hidden">
           <img
             src={post.image}
             alt={post.title}
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-background via-background/50 to-transparent" />
         </div>
 
         {/* Content Overlay */}
@@ -487,7 +512,7 @@ export default function BlogPostPage() {
               transition={{ duration: 0.5 }}
             >
               {/* Back Button */}
-              <Link 
+              <Link
                 href="/blog"
                 className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-violet-500"
               >
@@ -510,12 +535,19 @@ export default function BlogPostPage() {
                 {/* Author */}
                 <div className="flex items-center gap-3">
                   <Avatar className="h-12 w-12 border-2 border-violet-500/30">
-                    <AvatarImage src={post.author.avatar} alt={post.author.name} />
+                    <AvatarImage
+                      src={post.author.avatar}
+                      alt={post.author.name}
+                    />
                     <AvatarFallback>MH</AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-medium text-foreground">{post.author.name}</p>
-                    <p className="text-sm text-muted-foreground">{post.author.role}</p>
+                    <p className="font-medium text-foreground">
+                      {post.author.name}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {post.author.role}
+                    </p>
                   </div>
                 </div>
 
@@ -560,8 +592,8 @@ export default function BlogPostPage() {
                 <button
                   onClick={() => setLiked(!liked)}
                   className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all ${
-                    liked 
-                      ? "border-red-500/50 bg-red-500/10 text-red-500" 
+                    liked
+                      ? "border-red-500/50 bg-red-500/10 text-red-500"
                       : "border-border/50 bg-card/50 text-muted-foreground hover:border-red-500/30 hover:text-red-500"
                   }`}
                 >
@@ -571,12 +603,14 @@ export default function BlogPostPage() {
                 <button
                   onClick={() => setBookmarked(!bookmarked)}
                   className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all ${
-                    bookmarked 
-                      ? "border-violet-500/50 bg-violet-500/10 text-violet-500" 
+                    bookmarked
+                      ? "border-violet-500/50 bg-violet-500/10 text-violet-500"
                       : "border-border/50 bg-card/50 text-muted-foreground hover:border-violet-500/30 hover:text-violet-500"
                   }`}
                 >
-                  <Bookmark className={`h-5 w-5 ${bookmarked ? "fill-current" : ""}`} />
+                  <Bookmark
+                    className={`h-5 w-5 ${bookmarked ? "fill-current" : ""}`}
+                  />
                 </button>
 
                 <button className="flex h-12 w-12 items-center justify-center rounded-full border border-border/50 bg-card/50 text-muted-foreground transition-all hover:border-violet-500/30 hover:text-violet-500">
@@ -597,7 +631,9 @@ export default function BlogPostPage() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="mt-12 border-t border-border/50 pt-8"
           >
-            <h3 className="mb-4 text-sm font-medium text-muted-foreground">Tags</h3>
+            <h3 className="mb-4 text-sm font-medium text-muted-foreground">
+              Tags
+            </h3>
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag) => (
                 <Badge
@@ -624,10 +660,13 @@ export default function BlogPostPage() {
                 <AvatarFallback>MH</AvatarFallback>
               </Avatar>
               <div className="flex-1">
-                <h3 className="text-xl font-bold text-foreground">{post.author.name}</h3>
+                <h3 className="text-xl font-bold text-foreground">
+                  {post.author.name}
+                </h3>
                 <p className="text-violet-500">{post.author.role}</p>
                 <p className="mt-2 text-muted-foreground">
-                  Passionate about building scalable web applications and sharing knowledge with the developer community.
+                  Passionate about building scalable web applications and
+                  sharing knowledge with the developer community.
                 </p>
               </div>
               <Button
@@ -649,7 +688,9 @@ export default function BlogPostPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="mb-8 text-2xl font-bold text-foreground">Related Articles</h2>
+            <h2 className="mb-8 text-2xl font-bold text-foreground">
+              Related Articles
+            </h2>
 
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {relatedPosts.map((relatedPost, index) => (
@@ -663,7 +704,7 @@ export default function BlogPostPage() {
                 >
                   <Link href={`/blog/${relatedPost.slug}`}>
                     <div className="overflow-hidden rounded-xl border border-border/50 bg-card/50 transition-all duration-300 hover:border-violet-500/30 hover:shadow-lg hover:shadow-violet-500/5">
-                      <div className="relative aspect-[16/10] overflow-hidden">
+                      <div className="relative aspect-16/10 overflow-hidden">
                         <img
                           src={relatedPost.image}
                           alt={relatedPost.title}
@@ -677,7 +718,9 @@ export default function BlogPostPage() {
                         <h3 className="line-clamp-2 font-semibold text-foreground transition-colors group-hover:text-violet-500">
                           {relatedPost.title}
                         </h3>
-                        <p className="mt-2 text-sm text-muted-foreground">{relatedPost.readTime}</p>
+                        <p className="mt-2 text-sm text-muted-foreground">
+                          {relatedPost.readTime}
+                        </p>
                       </div>
                     </div>
                   </Link>
@@ -710,5 +753,5 @@ export default function BlogPostPage() {
         </div>
       </section>
     </main>
-  )
+  );
 }

@@ -1,9 +1,17 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Link from "next/link"
-import { Github, Linkedin, Twitter, Heart, ArrowUp, Mail, MapPin } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import {
+  ArrowUp,
+  Github,
+  Heart,
+  Linkedin,
+  Mail,
+  MapPin,
+  Twitter,
+} from "lucide-react";
+import Link from "next/link";
 
 const quickLinks = [
   { name: "Home", href: "#home" },
@@ -11,25 +19,29 @@ const quickLinks = [
   { name: "Projects", href: "#projects" },
   { name: "Blog", href: "#blog" },
   { name: "Contact", href: "#contact" },
-]
+];
 
 const socialLinks = [
-  { name: "GitHub", href: "https://github.com", icon: Github },
-  { name: "LinkedIn", href: "https://linkedin.com", icon: Linkedin },
-  { name: "Twitter", href: "https://twitter.com", icon: Twitter },
-]
+  { name: "GitHub", href: "https://github.com/mahedihsharif", icon: Github },
+  {
+    name: "LinkedIn",
+    href: "https://linkedin.com/in/mahedihsharif",
+    icon: Linkedin,
+  },
+  { name: "Twitter", href: "https://twitter.com/mahedihsharif", icon: Twitter },
+];
 
 export function Footer() {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="relative border-t border-border/40 bg-background/80 backdrop-blur-xl">
       {/* Gradient line at top */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-500 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-violet-500 to-transparent" />
 
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
@@ -42,27 +54,30 @@ export function Footer() {
             className="lg:col-span-2"
           >
             <Link href="/" className="inline-flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-purple-600 shadow-lg shadow-violet-500/25">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-violet-600 to-purple-600 shadow-lg shadow-violet-500/25">
                 <span className="text-lg font-bold text-white">M</span>
               </div>
               <div>
                 <span className="text-xl font-bold text-foreground">
                   Mahedi H Sharif
                 </span>
-                <p className="text-sm text-muted-foreground">Full Stack Developer</p>
+                <p className="text-sm text-muted-foreground">
+                  Full Stack Developer
+                </p>
               </div>
             </Link>
 
             <p className="mt-4 max-w-md text-muted-foreground">
-              Building modern, scalable web applications with cutting-edge technologies. 
-              Passionate about creating exceptional user experiences and clean code.
+              Full-stack developer building end-to-end web applications with
+              React, Next.js, and Node.js — from pixel-perfect UIs to scalable
+              backends.
             </p>
 
             {/* Contact Info */}
             <div className="mt-6 flex flex-col gap-2">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4 text-violet-500" />
-                <span>mahedi@example.com</span>
+                <span>mahedi5061@gmail.com</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 text-violet-500" />
@@ -130,7 +145,7 @@ export function Footer() {
             <div className="mt-4">
               <Button
                 asChild
-                className="w-full gap-2 bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-violet-500/30"
+                className="w-full gap-2 bg-linear-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-violet-500/30"
               >
                 <Link href="#contact">
                   <Mail className="h-4 w-4" />
@@ -165,15 +180,15 @@ export function Footer() {
           </p>
 
           <div className="flex items-center gap-4">
-            <Link 
-              href="/privacy" 
+            <Link
+              href="/privacy"
               className="text-sm text-muted-foreground transition-colors hover:text-violet-500"
             >
               Privacy Policy
             </Link>
             <span className="text-muted-foreground/50">|</span>
-            <Link 
-              href="/terms" 
+            <Link
+              href="/terms"
               className="text-sm text-muted-foreground transition-colors hover:text-violet-500"
             >
               Terms of Service
@@ -192,5 +207,5 @@ export function Footer() {
         </motion.div>
       </div>
     </footer>
-  )
+  );
 }

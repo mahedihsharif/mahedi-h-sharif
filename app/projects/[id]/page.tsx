@@ -1,36 +1,37 @@
-"use client"
+"use client";
 
-import { useRef } from "react"
-import { motion, useInView, useScroll, useTransform } from "framer-motion"
-import { 
-  ArrowLeft, 
-  ExternalLink, 
-  Github, 
-  Server,
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import {
+  ArrowLeft,
   Calendar,
-  Users,
-  Clock,
   CheckCircle2,
+  Clock,
+  Code2,
+  Database,
+  ExternalLink,
+  GitBranch,
+  Github,
+  Globe,
   Layers,
-  Zap,
+  Server,
   Shield,
   Smartphone,
-  Globe,
-  Database,
-  Code2,
-  GitBranch,
-  Star
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
+  Star,
+  Users,
+  Zap,
+} from "lucide-react";
+import Link from "next/link";
+import { useRef } from "react";
 
 // Sample project data - in real app, this would come from API/database
 const projectData = {
   id: 1,
   title: "E-Commerce Platform",
   subtitle: "Full-Stack MERN Application",
-  description: "A comprehensive e-commerce solution built with modern technologies. This platform features real-time inventory management, secure payment processing with Stripe, an intuitive admin dashboard, and a seamless shopping experience for customers.",
+  description:
+    "A comprehensive e-commerce solution built with modern technologies. This platform features real-time inventory management, secure payment processing with Stripe, an intuitive admin dashboard, and a seamless shopping experience for customers.",
   longDescription: `
     This e-commerce platform was built to provide a complete online shopping solution for businesses of all sizes. 
     The application handles everything from product catalog management to order fulfillment, with a focus on 
@@ -43,7 +44,8 @@ const projectData = {
     building a robust cart system that persists across devices, and integrating multiple payment providers 
     while maintaining PCI compliance.
   `,
-  banner: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1600&h=900&fit=crop",
+  banner:
+    "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1600&h=900&fit=crop",
   category: "Full Stack",
   date: "January 2024",
   duration: "3 months",
@@ -67,65 +69,75 @@ const projectData = {
     {
       icon: Zap,
       title: "Real-time Inventory",
-      description: "Live inventory updates across all user sessions using WebSocket connections"
+      description:
+        "Live inventory updates across all user sessions using WebSocket connections",
     },
     {
       icon: Shield,
       title: "Secure Payments",
-      description: "PCI-compliant payment processing with Stripe integration and fraud detection"
+      description:
+        "PCI-compliant payment processing with Stripe integration and fraud detection",
     },
     {
       icon: Smartphone,
       title: "Responsive Design",
-      description: "Fully responsive UI that works seamlessly on desktop, tablet, and mobile devices"
+      description:
+        "Fully responsive UI that works seamlessly on desktop, tablet, and mobile devices",
     },
     {
       icon: Globe,
       title: "Multi-language Support",
-      description: "Internationalization support with automatic language detection"
+      description:
+        "Internationalization support with automatic language detection",
     },
     {
       icon: Database,
       title: "Advanced Search",
-      description: "Full-text search with filters, sorting, and faceted navigation"
+      description:
+        "Full-text search with filters, sorting, and faceted navigation",
     },
     {
       icon: Users,
       title: "User Management",
-      description: "Complete user authentication with role-based access control"
+      description:
+        "Complete user authentication with role-based access control",
     },
   ],
   gallery: [
     {
       src: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=500&fit=crop",
       alt: "Dashboard Overview",
-      caption: "Admin Dashboard"
+      caption: "Admin Dashboard",
     },
     {
       src: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=500&fit=crop",
       alt: "Analytics View",
-      caption: "Analytics & Reports"
+      caption: "Analytics & Reports",
     },
     {
       src: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=500&fit=crop",
       alt: "Product Management",
-      caption: "Product Management"
+      caption: "Product Management",
     },
     {
       src: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=500&fit=crop",
       alt: "Shopping Cart",
-      caption: "Shopping Cart"
+      caption: "Shopping Cart",
     },
   ],
   architecture: {
-    description: "The application follows a microservices architecture pattern with separate services for user management, product catalog, orders, and payments.",
+    description:
+      "The application follows a microservices architecture pattern with separate services for user management, product catalog, orders, and payments.",
     layers: [
       { name: "Client Layer", tech: "Next.js, React, Tailwind CSS" },
-      { name: "API Gateway", tech: "Express.js, Rate Limiting, Auth Middleware" },
+      {
+        name: "API Gateway",
+        tech: "Express.js, Rate Limiting, Auth Middleware",
+      },
       { name: "Service Layer", tech: "Node.js Microservices" },
       { name: "Data Layer", tech: "MongoDB, Redis Cache" },
       { name: "External Services", tech: "Stripe, AWS S3, SendGrid" },
-    ]
+    ],
   },
   links: {
     live: "https://demo.example.com",
@@ -137,13 +149,19 @@ const projectData = {
     { label: "Lighthouse Score", value: "95+" },
     { label: "Test Coverage", value: "87%" },
     { label: "Uptime", value: "99.9%" },
-  ]
-}
+  ],
+};
 
-function SectionTitle({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-50px" })
-  
+function SectionTitle({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
   return (
     <motion.h2
       ref={ref}
@@ -154,34 +172,34 @@ function SectionTitle({ children, className = "" }: { children: React.ReactNode;
     >
       {children}
     </motion.h2>
-  )
+  );
 }
 
 export default function ProjectDetailsPage() {
-  const heroRef = useRef(null)
+  const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
-    offset: ["start start", "end start"]
-  })
-  
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"])
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+    offset: ["start start", "end start"],
+  });
+
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
     <main className="min-h-screen bg-background">
       {/* Hero Banner Section */}
-      <section ref={heroRef} className="relative h-[60vh] min-h-[500px] overflow-hidden">
+      <section
+        ref={heroRef}
+        className="relative h-[60vh] min-h-125 overflow-hidden"
+      >
         {/* Background Image with Parallax */}
-        <motion.div 
-          className="absolute inset-0"
-          style={{ y: imageY }}
-        >
+        <motion.div className="absolute inset-0" style={{ y: imageY }}>
           <img
             src={projectData.banner}
             alt={projectData.title}
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/20" />
+          <div className="absolute inset-0 bg-linear-to-t from-background via-background/60 to-background/20" />
         </motion.div>
 
         {/* Back Button */}
@@ -205,7 +223,7 @@ export default function ProjectDetailsPage() {
         </motion.div>
 
         {/* Hero Content */}
-        <motion.div 
+        <motion.div
           style={{ opacity }}
           className="absolute inset-0 flex items-end"
         >
@@ -219,12 +237,12 @@ export default function ProjectDetailsPage() {
               <Badge className="mb-4 border-none bg-violet-600 text-white">
                 {projectData.category}
               </Badge>
-              
+
               {/* Title */}
               <h1 className="mb-3 text-4xl font-bold text-white sm:text-5xl md:text-6xl">
                 {projectData.title}
               </h1>
-              
+
               {/* Subtitle */}
               <p className="mb-6 text-lg text-white/80 sm:text-xl">
                 {projectData.subtitle}
@@ -257,7 +275,6 @@ export default function ProjectDetailsPage() {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-16">
         <div className="mx-auto max-w-5xl">
-          
           {/* Action Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -267,10 +284,14 @@ export default function ProjectDetailsPage() {
           >
             <Button
               size="lg"
-              className="gap-2 bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50"
+              className="gap-2 bg-linear-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50"
               asChild
             >
-              <a href={projectData.links.live} target="_blank" rel="noopener noreferrer">
+              <a
+                href={projectData.links.live}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <ExternalLink className="h-5 w-5" />
                 Live Site
               </a>
@@ -281,7 +302,11 @@ export default function ProjectDetailsPage() {
               className="gap-2 border-border/50 backdrop-blur-sm hover:border-violet-500/50 hover:bg-violet-500/10"
               asChild
             >
-              <a href={projectData.links.githubFrontend} target="_blank" rel="noopener noreferrer">
+              <a
+                href={projectData.links.githubFrontend}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Github className="h-5 w-5" />
                 GitHub Frontend
               </a>
@@ -292,7 +317,11 @@ export default function ProjectDetailsPage() {
               className="gap-2 border-border/50 backdrop-blur-sm hover:border-violet-500/50 hover:bg-violet-500/10"
               asChild
             >
-              <a href={projectData.links.githubBackend} target="_blank" rel="noopener noreferrer">
+              <a
+                href={projectData.links.githubBackend}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Server className="h-5 w-5" />
                 GitHub Backend
               </a>
@@ -349,7 +378,9 @@ export default function ProjectDetailsPage() {
                   className="group rounded-xl border border-border/50 bg-card/50 p-4 backdrop-blur-sm transition-all hover:border-violet-500/50 hover:shadow-lg hover:shadow-violet-500/10"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium text-foreground">{tech.name}</span>
+                    <span className="font-medium text-foreground">
+                      {tech.name}
+                    </span>
                     <Badge variant="secondary" className="text-xs">
                       {tech.category}
                     </Badge>
@@ -375,7 +406,7 @@ export default function ProjectDetailsPage() {
             </SectionTitle>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {projectData.features.map((feature, index) => {
-                const Icon = feature.icon
+                const Icon = feature.icon;
                 return (
                   <motion.div
                     key={feature.title}
@@ -396,7 +427,7 @@ export default function ProjectDetailsPage() {
                       {feature.description}
                     </p>
                   </motion.div>
-                )
+                );
               })}
             </div>
           </motion.section>
@@ -433,9 +464,11 @@ export default function ProjectDetailsPage() {
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
-                  <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <div className="absolute inset-0 flex items-end bg-linear-to-t from-black/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     <div className="p-4">
-                      <p className="text-sm font-medium text-white">{image.caption}</p>
+                      <p className="text-sm font-medium text-white">
+                        {image.caption}
+                      </p>
                     </div>
                   </div>
                 </motion.div>
@@ -471,20 +504,22 @@ export default function ProjectDetailsPage() {
                   className="group relative overflow-hidden rounded-xl border border-border/50 bg-card/50 p-5 backdrop-blur-sm transition-all hover:border-violet-500/50"
                 >
                   {/* Layer indicator */}
-                  <div className="absolute bottom-0 left-0 top-0 w-1 bg-gradient-to-b from-violet-600 to-purple-600" />
-                  
+                  <div className="absolute bottom-0 left-0 top-0 w-1 bg-linear-to-b from-violet-600 to-purple-600" />
+
                   <div className="ml-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex items-center gap-3">
                       <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/10 text-sm font-bold text-violet-500">
                         {index + 1}
                       </span>
-                      <h4 className="font-semibold text-foreground">{layer.name}</h4>
+                      <h4 className="font-semibold text-foreground">
+                        {layer.name}
+                      </h4>
                     </div>
                     <div className="flex flex-wrap gap-2 sm:ml-0 ml-11">
                       {layer.tech.split(", ").map((tech) => (
-                        <Badge 
-                          key={tech} 
-                          variant="secondary" 
+                        <Badge
+                          key={tech}
+                          variant="secondary"
                           className="text-xs"
                         >
                           {tech}
@@ -505,7 +540,7 @@ export default function ProjectDetailsPage() {
             transition={{ duration: 0.6 }}
             className="mb-20"
           >
-            <div className="rounded-2xl border border-border/50 bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-transparent p-8 backdrop-blur-sm">
+            <div className="rounded-2xl border border-border/50 bg-linear-to-br from-violet-500/10 via-purple-500/5 to-transparent p-8 backdrop-blur-sm">
               <h3 className="mb-6 text-center text-xl font-semibold text-foreground">
                 Project Metrics
               </h3>
@@ -543,34 +578,31 @@ export default function ProjectDetailsPage() {
               Interested in this project?
             </h3>
             <p className="mb-8 text-muted-foreground">
-              Feel free to check out the live demo or explore the source code on GitHub.
+              Feel free to check out the live demo or explore the source code on
+              GitHub.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button
                 size="lg"
-                className="gap-2 bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50"
+                className="gap-2 bg-linear-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50"
                 asChild
               >
-                <a href={projectData.links.live} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={projectData.links.live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <ExternalLink className="h-5 w-5" />
                   View Live Site
                 </a>
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="gap-2"
-                asChild
-              >
-                <Link href="/#contact">
-                  Get in Touch
-                </Link>
+              <Button size="lg" variant="outline" className="gap-2" asChild>
+                <Link href="/#contact">Get in Touch</Link>
               </Button>
             </div>
           </motion.div>
-
         </div>
       </div>
     </main>
-  )
+  );
 }

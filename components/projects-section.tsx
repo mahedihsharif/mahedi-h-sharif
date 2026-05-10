@@ -1,126 +1,143 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { useInView } from "framer-motion"
-import { useRef } from "react"
-import { 
-  ExternalLink, 
-  Github, 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { AnimatePresence, motion, useInView } from "framer-motion";
+import {
+  Code2,
+  ExternalLink,
   Eye,
+  Github,
   Layers,
-  Server,
   Layout,
-  Code2
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
+  Server,
+} from "lucide-react";
+import Link from "next/link";
+import { useRef, useState } from "react";
 
 const categories = [
   { id: "all", label: "All Projects", icon: Layers },
   { id: "frontend", label: "Frontend", icon: Layout },
   { id: "fullstack", label: "Full Stack", icon: Code2 },
   { id: "backend", label: "Backend", icon: Server },
-]
+];
 
 const projects = [
   {
     id: 1,
-    title: "E-Commerce Platform",
-    description: "A full-featured e-commerce platform with real-time inventory management, payment integration, and admin dashboard.",
-    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=500&fit=crop",
+    title: "Job Tracker App",
+    description:
+      "A full-stack web application to manage and track job applications with advanced filtering and secure authentication.",
+    image: "https://i.ibb.co.com/JwGY4R0D/job-tracker-image-bb.jpg",
     category: "fullstack",
-    techStack: ["Next.js", "Node.js", "MongoDB", "Stripe", "Tailwind CSS"],
-    liveDemo: "https://demo.example.com",
-    githubFrontend: "https://github.com",
-    githubBackend: "https://github.com",
+    techStack: ["React.js", "Node.js", "MongoDB", "Express.js", "ShadCN UI"],
+    liveDemo: "https://job-tracker-me.vercel.app",
+    githubFrontend: "https://github.com/mahedihsharif/job-tracker-client",
+    githubBackend: "https://github.com/mahedihsharif/job-tracker-backend",
     featured: true,
   },
   {
     id: 2,
-    title: "Task Management App",
-    description: "Collaborative task management application with real-time updates, team workspaces, and progress tracking.",
-    image: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=500&fit=crop",
+    title: "Ride Sharing Platform",
+    description:
+      "Built a full-stack ride-hailing platform with role-based access for Admin, Rider, and Driver-featuring JWT authentication and fully protected routes.",
+    image: "https://i.ibb.co.com/Pzh6Wfmh/rider-sharing-bb.jpg",
     category: "fullstack",
-    techStack: ["React", "Express", "PostgreSQL", "Socket.io", "Redux"],
-    liveDemo: "https://demo.example.com",
-    githubFrontend: "https://github.com",
-    githubBackend: "https://github.com",
+    techStack: ["React", "Express", "MongoDB", "Tailwind CSS", "Redux"],
+    liveDemo: "https://ride-booking-client.vercel.app",
+    githubFrontend: "https://github.com/mahedihsharif/ride-booking-client",
+    githubBackend: "https://github.com/mahedihsharif/ride_booking_api",
     featured: true,
   },
   {
     id: 3,
-    title: "Portfolio Dashboard",
-    description: "Modern analytics dashboard with interactive charts, data visualization, and responsive design.",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=500&fit=crop",
-    category: "frontend",
-    techStack: ["React", "TypeScript", "Recharts", "Tailwind CSS", "Framer Motion"],
-    liveDemo: "https://demo.example.com",
-    githubFrontend: "https://github.com",
+    title: "Library Management System",
+    description:
+      "A comprehensive library management system with user authentication, book inventory management, and borrowing/returning functionality.",
+    image:
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=500&fit=crop",
+    category: "fullstack",
+    techStack: ["React", "TypeScript", "Node.js", "Tailwind CSS"],
+    liveDemo: "https://library-management-app-one-mu.vercel.app/",
+    githubFrontend:
+      "https://github.com/mahedihsharif/Library_Management_System_Client",
+    githubBackend: "https://github.com/mahedihsharif/Library_Management_System",
     featured: false,
   },
   {
     id: 4,
-    title: "REST API Service",
-    description: "Scalable RESTful API with authentication, rate limiting, caching, and comprehensive documentation.",
-    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=500&fit=crop",
-    category: "backend",
-    techStack: ["Node.js", "Express", "MongoDB", "Redis", "JWT"],
-    liveDemo: "https://api.example.com",
-    githubBackend: "https://github.com",
+    title: "E-commerce Site",
+    description:
+      "Developed a secure and scalable e-commerce backend with Node.js, Express, MongoDB,and JWT authentication for seamless user experience.",
+    image: "https://i.ibb.co.com/3mbr5wG6/ekhonie-final-verson-imagebb.jpg",
+    category: "frontend",
+    techStack: ["Node.js", "Express", "MongoDB", "JWT"],
+    liveDemo: "https://ekhonie.netlify.app/",
+    githubFrontend: "https://github.com/mahedihsharif/techbazar_client",
+    githubBackend: "https://github.com/mahedihsharif/techbazar_api",
     featured: false,
   },
   {
     id: 5,
-    title: "Social Media Dashboard",
-    description: "Feature-rich social media management tool with scheduling, analytics, and multi-platform support.",
-    image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&h=500&fit=crop",
-    category: "fullstack",
-    techStack: ["Next.js", "Prisma", "PostgreSQL", "NextAuth", "Tailwind CSS"],
-    liveDemo: "https://demo.example.com",
-    githubFrontend: "https://github.com",
-    githubBackend: "https://github.com",
+    title: "SlothUI - Landing Page Design",
+    description:
+      "Crafted a sleek landing page for SlothUI, showcasing its features and benefits with a modern design and responsive layout.",
+    image: "https://i.ibb.co.com/4RfRqKVp/SLOTHUI.jpg",
+    category: "frontend",
+    techStack: ["HTML", "CSS", "JavaScript"],
+    liveDemo: "https://slothuilive.netlify.app/",
+    githubFrontend: "https://github.com/mahedihsharif/slothui",
     featured: true,
   },
   {
     id: 6,
     title: "Landing Page Template",
-    description: "High-converting SaaS landing page with smooth animations, responsive design, and optimized performance.",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=500&fit=crop",
+    description:
+      "Designed a modern landing page template with responsive design, smooth animations, and a clean layout to effectively showcase products or services.",
+    image: "https://i.ibb.co.com/qMmTdD0M/cm-repair-image-bb.jpg",
     category: "frontend",
-    techStack: ["React", "Tailwind CSS", "Framer Motion", "Vite"],
-    liveDemo: "https://demo.example.com",
-    githubFrontend: "https://github.com",
+    techStack: ["React", "CSS"],
+    liveDemo: "https://cm-repair.netlify.app/",
+    githubFrontend: "https://github.com/mahedihsharif/CM-Repair",
     featured: false,
   },
   {
     id: 7,
-    title: "Authentication Microservice",
-    description: "Secure authentication service with OAuth2, JWT tokens, role-based access control, and session management.",
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=500&fit=crop",
-    category: "backend",
-    techStack: ["Node.js", "Express", "MongoDB", "JWT", "OAuth2"],
-    githubBackend: "https://github.com",
+    title: "Prada Landing Page Template",
+    description:
+      "Designed a modern landing page template with responsive design, smooth animations, and a clean layout to effectively showcase products or services.",
+    image: "https://i.ibb.co.com/C5BPfFCq/parada-new-bb.jpg",
+    category: "frontend",
+    techStack: ["HTML", "CSS"],
+    liveDemo: "https://globex-vertical.netlify.app/",
     featured: false,
   },
   {
     id: 8,
-    title: "Real-time Chat Application",
-    description: "Modern chat application with real-time messaging, file sharing, video calls, and end-to-end encryption.",
-    image: "https://images.unsplash.com/photo-1611606063065-ee7946f0787a?w=800&h=500&fit=crop",
+    title: "Go Green Recycling",
+    description:
+      "Go Green Recycling is a full-stack web application that promotes sustainable waste management by connecting users with local recycling centers, providing educational resources, and tracking recycling habits.",
+    image: "https://i.ibb.co.com/HpxLpTp3/gogreen-bb.jpg",
     category: "fullstack",
-    techStack: ["Next.js", "Socket.io", "MongoDB", "WebRTC", "Tailwind CSS"],
-    liveDemo: "https://demo.example.com",
-    githubFrontend: "https://github.com",
-    githubBackend: "https://github.com",
+    techStack: ["React", "Node.js", "Express", "MongoDB"],
+    liveDemo: "https://go-green-recycling.netlify.app/",
+    githubFrontend:
+      "https://github.com/mahedihsharif/go-green-recycling-client-site",
+    githubBackend:
+      "https://github.com/mahedihsharif/go-green-recycling-server-site",
     featured: false,
   },
-]
+];
 
-function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
-  const cardRef = useRef(null)
-  const isInView = useInView(cardRef, { once: true, margin: "-50px" })
+function ProjectCard({
+  project,
+  index,
+}: {
+  project: (typeof projects)[0];
+  index: number;
+}) {
+  const cardRef = useRef(null);
+  const isInView = useInView(cardRef, { once: true, margin: "-50px" });
 
   return (
     <motion.div
@@ -135,7 +152,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
         {/* Featured Badge */}
         {project.featured && (
           <div className="absolute right-4 top-4 z-10">
-            <Badge className="border-none bg-gradient-to-r from-violet-600 to-purple-600 text-white">
+            <Badge className="border-none bg-linear-to-r from-violet-600 to-purple-600 text-white">
               Featured
             </Badge>
           </div>
@@ -149,10 +166,10 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
             className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
           {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-80" />
-          
+          <div className="absolute inset-0 bg-linear-to-t from-background via-background/20 to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-80" />
+
           {/* Hover Actions */}
-          <motion.div 
+          <motion.div
             className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             initial={false}
           >
@@ -188,7 +205,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           {/* Category Tag */}
           <div className="mb-3">
             <span className="text-xs font-medium uppercase tracking-wider text-violet-500">
-              {categories.find(c => c.id === project.category)?.label}
+              {categories.find((c) => c.id === project.category)?.label}
             </span>
           </div>
 
@@ -205,17 +222,17 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           {/* Tech Stack */}
           <div className="mb-5 flex flex-wrap gap-2">
             {project.techStack.slice(0, 4).map((tech) => (
-              <Badge 
-                key={tech} 
-                variant="secondary" 
+              <Badge
+                key={tech}
+                variant="secondary"
                 className="border border-border/50 bg-secondary/50 text-xs font-normal"
               >
                 {tech}
               </Badge>
             ))}
             {project.techStack.length > 4 && (
-              <Badge 
-                variant="secondary" 
+              <Badge
+                variant="secondary"
                 className="border border-border/50 bg-secondary/50 text-xs font-normal"
               >
                 +{project.techStack.length - 4}
@@ -228,10 +245,14 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
             {project.liveDemo && (
               <Button
                 size="sm"
-                className="h-9 gap-2 bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/25 transition-all hover:shadow-violet-500/40"
+                className="h-9 gap-2 bg-linear-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/25 transition-all hover:shadow-violet-500/40"
                 asChild
               >
-                <a href={project.liveDemo} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={project.liveDemo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <ExternalLink className="h-4 w-4" />
                   Live Demo
                 </a>
@@ -244,7 +265,11 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
                 className="h-9 gap-2 border-border/50 bg-background/50 backdrop-blur-sm transition-all hover:border-violet-500/50 hover:bg-violet-500/10"
                 asChild
               >
-                <a href={project.githubFrontend} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={project.githubFrontend}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Github className="h-4 w-4" />
                   Frontend
                 </a>
@@ -257,7 +282,11 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
                 className="h-9 gap-2 border-border/50 bg-background/50 backdrop-blur-sm transition-all hover:border-violet-500/50 hover:bg-violet-500/10"
                 asChild
               >
-                <a href={project.githubBackend} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={project.githubBackend}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Server className="h-4 w-4" />
                   Backend
                 </a>
@@ -269,7 +298,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
               className="h-9 gap-2 text-muted-foreground transition-all hover:text-violet-500"
               asChild
             >
-              <Link href={`/projects/${project.id}`}>
+              <Link href="#projects">
                 <Eye className="h-4 w-4" />
                 Details
               </Link>
@@ -279,21 +308,22 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
 
         {/* Glow Effect */}
         <div className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-600/20 via-purple-600/20 to-violet-600/20 blur-sm" />
+          <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-violet-600/20 via-purple-600/20 to-violet-600/20 blur-sm" />
         </div>
       </div>
     </motion.div>
-  )
+  );
 }
 
 export function ProjectsSection() {
-  const [activeCategory, setActiveCategory] = useState("all")
-  const sectionRef = useRef(null)
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
+  const [activeCategory, setActiveCategory] = useState("all");
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   const filteredProjects = projects.filter(
-    project => activeCategory === "all" || project.category === activeCategory
-  )
+    (project) =>
+      activeCategory === "all" || project.category === activeCategory,
+  );
 
   return (
     <section
@@ -305,7 +335,7 @@ export function ProjectsSection() {
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/4 top-0 h-96 w-96 rounded-full bg-violet-500/10 blur-3xl" />
         <div className="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-purple-500/10 blur-3xl" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.3)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.3)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,black_40%,transparent_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.3)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.3)_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_50%_at_50%_50%,black_40%,transparent_100%)]" />
       </div>
 
       <div className="container relative mx-auto px-4">
@@ -318,7 +348,9 @@ export function ProjectsSection() {
         >
           <motion.span
             initial={{ opacity: 0, scale: 0.9 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+            animate={
+              isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }
+            }
             transition={{ duration: 0.5, delay: 0.1 }}
             className="mb-4 inline-block rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5 text-sm font-medium text-violet-500"
           >
@@ -326,13 +358,13 @@ export function ProjectsSection() {
           </motion.span>
           <h2 className="mb-4 text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
             Featured{" "}
-            <span className="bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
               Projects
             </span>
           </h2>
           <p className="text-pretty text-lg text-muted-foreground">
-            Explore my latest work showcasing full-stack development, modern UI/UX design, 
-            and scalable architecture solutions.
+            Explore my latest work showcasing full-stack development, modern
+            UI/UX design, and scalable architecture solutions.
           </p>
         </motion.div>
 
@@ -344,8 +376,8 @@ export function ProjectsSection() {
           className="mb-12 flex flex-wrap justify-center gap-3"
         >
           {categories.map((category) => {
-            const Icon = category.icon
-            const isActive = activeCategory === category.id
+            const Icon = category.icon;
+            const isActive = activeCategory === category.id;
             return (
               <motion.button
                 key={category.id}
@@ -354,9 +386,10 @@ export function ProjectsSection() {
                 whileTap={{ scale: 0.98 }}
                 className={`
                   relative flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-300
-                  ${isActive 
-                    ? "bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/30" 
-                    : "border border-border/50 bg-card/50 text-muted-foreground backdrop-blur-sm hover:border-violet-500/50 hover:text-foreground"
+                  ${
+                    isActive
+                      ? "bg-linear-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/30"
+                      : "border border-border/50 bg-card/50 text-muted-foreground backdrop-blur-sm hover:border-violet-500/50 hover:text-foreground"
                   }
                 `}
               >
@@ -365,20 +398,17 @@ export function ProjectsSection() {
                 {isActive && (
                   <motion.span
                     layoutId="activeFilter"
-                    className="absolute inset-0 -z-10 rounded-full bg-gradient-to-r from-violet-600 to-purple-600"
+                    className="absolute inset-0 -z-10 rounded-full bg-linear-to-r from-violet-600 to-purple-600"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
               </motion.button>
-            )
+            );
           })}
         </motion.div>
 
         {/* Projects Grid */}
-        <motion.div 
-          layout
-          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-        >
+        <motion.div layout className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project, index) => (
               <ProjectCard key={project.id} project={project} index={index} />
@@ -418,15 +448,19 @@ export function ProjectsSection() {
         >
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {[
-              { label: "Projects Completed", value: "50+" },
-              { label: "Technologies Used", value: "15+" },
-              { label: "GitHub Stars", value: "2.5K+" },
-              { label: "Code Commits", value: "5K+" },
+              { label: "Projects Completed", value: "15+" },
+              { label: "Technologies Used", value: "12+" },
+              { label: "Happy Clients", value: "5+" },
+              { label: "Years of Experience", value: "1.5+" },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, scale: 0.9 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+                animate={
+                  isInView
+                    ? { opacity: 1, scale: 1 }
+                    : { opacity: 0, scale: 0.9 }
+                }
                 transition={{ duration: 0.4, delay: 0.8 + index * 0.1 }}
                 className="group rounded-2xl border border-border/50 bg-card/30 p-4 text-center backdrop-blur-sm transition-all hover:border-violet-500/50 hover:bg-card/50"
               >
@@ -442,5 +476,5 @@ export function ProjectsSection() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }
