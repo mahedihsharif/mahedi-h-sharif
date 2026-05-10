@@ -260,7 +260,7 @@ export function HeroSection() {
               className="group transition-all duration-300 hover:bg-violet-500/10"
             >
               <a
-                href="https://drive.google.com/file/d/1TN5o2kUOAq_1qmTmsmATxQ_WsymD6S0b/view?usp=drive_link"
+                href="https://drive.google.com/file/d/1UatFfmQ1zDdzNelTRNITKVW8-GxAxfzs/view?usp=sharing"
                 target="_blank"
                 rel="noopener noreferrer"
               >
