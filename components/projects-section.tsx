@@ -53,12 +53,11 @@ const projects = [
     id: 3,
     title: "Library Management System",
     description:
-      "A comprehensive library management system with user authentication, book inventory management, and borrowing/returning functionality.",
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=500&fit=crop",
+      "A comprehensive library management system, book inventory management, and borrowing/returning functionality.",
+    image: "https://i.ibb.co.com/SXFfR9dJ/libraray-bb.jpg",
     category: "fullstack",
     techStack: ["React", "TypeScript", "Node.js", "Tailwind CSS"],
-    liveDemo: "https://library-management-app-one-mu.vercel.app/",
+    liveDemo: "https://library-management-app-me.vercel.app/",
     githubFrontend:
       "https://github.com/mahedihsharif/Library_Management_System_Client",
     githubBackend: "https://github.com/mahedihsharif/Library_Management_System",
